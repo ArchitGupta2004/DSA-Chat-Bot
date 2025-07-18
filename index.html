@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Coding Instructor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, rgba(15, 32, 39, 0.6), rgba(32, 58, 67, 0.6), rgba(44, 83, 100, 0.6)), url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light-mode {
+      background: linear-gradient(to right, #f1f5f9, #cbd5e1);
+      color: #1e293b;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 960px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background 0.3s, color 0.3s;
+      position: relative;
+    }
+
+    body.light-mode .container {
+      background: #ffffffcc;
+      color: #1e293b;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 30px;
+      background: linear-gradient(to right, #7e6fff, #00d4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    select {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid #64748b;
+    }
+
+    body.light-mode select {
+      background: #f1f5f9;
+      color: #1e293b;
+      border-color: #cbd5e1;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 20px;
+      font-size: 1rem;
+      border: 1px solid rgba(126, 111, 255, 0.4);
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      resize: vertical;
+      margin-bottom: 20px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    body.light-mode textarea {
+      background-color: #f8fafc;
+      color: #1e293b;
+      border-color: #94a3b8;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #7e6fff;
+      box-shadow: 0 0 0 3px rgba(126, 111, 255, 0.2);
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    button {
+      padding: 14px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #7e6fff, #6a5af9);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 5px 20px rgba(126, 111, 255, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(126, 111, 255, 0.5);
+    }
+
+    .output {
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-left: 5px solid #00d4ff;
+      border-radius: 10px;
+      min-height: 150px;
+      white-space: pre-wrap;
+      color: #cbd5e1;
+    }
+
+    body.light-mode .output {
+      background: #f8fafc;
+      color: #1e293b;
+    }
+
+    code {
+      background: #1e293b;
+      padding: 4px 8px;
+      border-radius: 5px;
+      color: #00d4ff;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    body.light-mode code {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+ <div class="container">
+
+
+
+    <div class="header-image">
+
+
+
+      <!-- <img src="https://cdn-icons-png.flaticon.com/512/4712/4712107.png" alt="AI Icon" /> -->
+
+
+
+    </div>
+
+
+
+    <h1>AI Coding Instructor</h1>
+
+
+
+    <select id="modelSelector">
+
+
+
+      <option value="gemini-2.0-flash" selected>Gemini 2.0 Flash</option>
+
+
+
+      <option value="gemini-pro">Gemini Pro</option>
+
+
+
+      <option value="gemini-1.5">Gemini 1.5</option>
+
+
+
+    </select>
+
+
+
+    <textarea id="questionInput" rows="6" placeholder="Ask your coding question here..."></textarea>
+
+
+
+    <div class="button-group">
+
+
+
+      <button id="askButton"><i class="fas fa-paper-plane"></i> Ask AI</button>
+
+
+
+      <button id="historyButton"><i class="fas fa-history"></i> History</button>
+
+
+
+      <button id="tipsButton"><i class="fas fa-lightbulb"></i> Tips</button>
+
+
+
+      <button id="settingsButton"><i class="fas fa-cog"></i> Settings</button>
+
+
+
+      <button id="toggleTheme"><i class="fas fa-adjust"></i> Toggle Mode</button>
+
+
+
+    </div>
+
+
+
+    <div class="output" id="outputArea">
+
+
+
+      🤖 Ask something like:
+
+
+
+      <br />
+
+
+
+      <code>What is a binary tree?</code> or <code>Explain recursion in Python</code>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+
+
+
+
+  <script type="module">
+
+
+
+    const askButton = document.getElementById('askButton');
+
+
+
+    const questionInput = document.getElementById('questionInput');
+
+
+
+    const outputArea = document.getElementById('outputArea');
+
+
+
+    const toggleTheme = document.getElementById('toggleTheme');
+
+
+
+    const modelSelector = document.getElementById('modelSelector');
+
+
+
+    const historyButton = document.getElementById('historyButton');
+
+
+
+    const tipsButton = document.getElementById('tipsButton');
+
+
+
+    const settingsButton = document.getElementById('settingsButton');
+
+
+
+    const history = JSON.parse(localStorage.getItem('chatHistory')) || [];
+
+
+
+
+
+
+
+    toggleTheme.addEventListener('click', () => {
+
+
+
+      document.body.classList.toggle('light-mode');
+
+
+
+    });
+
+
+
+
+
+
+
+    askButton.addEventListener('click', async () => {
+
+
+
+      const question = questionInput.value.trim();
+
+
+
+      const model = modelSelector.value;
+
+
+
+
+
+
+
+      if (!question) {
+
+
+
+        outputArea.innerHTML = '<span style="color:red;">❗ Please enter a question.</span>';
+
+
+
+        return;
+
+
+
+      }
+
+
+
+
+
+
+
+      outputArea.innerHTML = '⏳ Thinking...';
+
+
+
+
+
+
+
+      const apiKey = "AIzaSyAx9YF3syCKAsher3VbKnvO-EoJqO5imqE";
+
+
+
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+
+
+
+
+
+
+      const systemInstruction = `You are a Data Structure and Algorithm Instructor. Reply only to DSA questions. If irrelevant, respond rudely.`;
+
+
+
+
+
+
+
+      const body = {
+
+
+
+        contents: [{ role: "user", parts: [{ text: question }] }],
+
+
+
+        systemInstruction: { parts: [{ text: systemInstruction }] },
+
+
+
+      };
+
+
+
+
+
+
+
+      try {
+
+
+
+        const response = await fetch(endpoint, {
+
+
+
+          method: 'POST',
+
+
+
+          headers: { 'Content-Type': 'application/json' },
+
+
+
+          body: JSON.stringify(body),
+
+
+
+        });
+
+
+
+
+
+
+
+        const data = await response.json();
+
+
+
+        const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '⚠️ No response received.';
+
+
+
+        outputArea.innerHTML = reply.replace(/```([\s\S]*?)```/g, '<code>$1</code>').replace(/\n/g, '<br>');
+
+
+
+        history.push({ question, reply });
+
+
+
+        localStorage.setItem('chatHistory', JSON.stringify(history));
+
+
+
+      } catch (err) {
+
+
+
+        outputArea.innerHTML = `❌ Error: ${err.message}`;
+
+
+
+      }
+
+
+
+    });
+
+
+
+
+
+
+
+    historyButton.addEventListener('click', () => {
+
+
+
+      if (history.length === 0) {
+
+
+
+        outputArea.innerHTML = '📭 No previous questions found.';
+
+
+
+        return;
+
+
+
+      }
+
+
+
+      outputArea.innerHTML = history.map(h => `🧑‍💻 <b>Q:</b> ${h.question}<br>🤖 <b>A:</b> ${h.reply}`).join('<hr>');
+
+
+
+    });
+
+
+
+
+
+
+
+    tipsButton.addEventListener('click', () => {
+
+
+
+      outputArea.innerHTML = '<b>💡 Tips to ask better questions:</b><br>- Be specific about your DSA topic<br>- Mention programming language if needed<br>- Keep it clear and concise';
+
+
+
+    });
+
+
+
+
+
+
+
+    settingsButton.addEventListener('click', () => {
+
+
+
+      outputArea.innerHTML = '<b>⚙️ Settings Info:</b><br>- Toggle theme (light/dark)<br>- Switch Gemini model<br>- Save and view question history';
+
+
+
+    });
+
+
+
+  </script>
+
+
+
+</body>
+
+
+
+</html>
